@@ -44,6 +44,94 @@ main {
   color: var(--foreground-color);
 }
 
+.with-side-toc #page-ctn {
+  margin-left: 300px;
+  margin-right: 24px;
+}
+
+#side-toc {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 260px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  padding: 18px 18px 24px;
+  color: var(--foreground-color);
+  background-color: var(--background-color);
+  border-right: 1px solid var(--border-color);
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  z-index: 10;
+}
+
+#side-toc-title {
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+#side-toc ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#side-toc li {
+  margin: 0;
+  line-height: 1.35;
+}
+
+#side-toc a {
+  display: block;
+  overflow: hidden;
+  padding: 4px 0;
+  color: var(--foreground-color);
+  font-size: 13px;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#side-toc a:hover {
+  text-decoration: underline;
+}
+
+#side-toc .side-toc-level-2 {
+  padding-left: 12px;
+}
+
+#side-toc .side-toc-level-3 {
+  padding-left: 24px;
+}
+
+#side-toc .side-toc-level-4,
+#side-toc .side-toc-level-5,
+#side-toc .side-toc-level-6 {
+  padding-left: 36px;
+}
+
+@media (max-width: 1100px) {
+  .with-side-toc #page-ctn {
+    margin-left: 260px;
+    margin-right: 16px;
+  }
+
+  #side-toc {
+    width: 230px;
+  }
+}
+
+@media (max-width: 760px) {
+  .with-side-toc #page-ctn {
+    margin: 0 auto;
+  }
+
+  #side-toc {
+    display: none;
+  }
+}
+
 #page-header {
   display: flex;
   justify-content: space-between;

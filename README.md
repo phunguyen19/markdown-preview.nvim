@@ -192,6 +192,7 @@ let g:mkdp_browserfunc = ''
 " sequence_diagrams: js-sequence-diagrams options
 " content_editable: if enable content editable for preview page, default: v:false
 " disable_filename: if disable filename header for preview page, default: 0
+" side_toc: if enable persistent left table of contents sidebar, default: 0
 let g:mkdp_preview_options = {
     \ 'mkit': {},
     \ 'katex': {},
@@ -204,6 +205,7 @@ let g:mkdp_preview_options = {
     \ 'flowchart_diagrams': {},
     \ 'content_editable': v:false,
     \ 'disable_filename': 0,
+    \ 'side_toc': 0,
     \ 'toc': {}
     \ }
 
