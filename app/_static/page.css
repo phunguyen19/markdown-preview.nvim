@@ -24,6 +24,11 @@ main {
   background-color: var(--secondary-background-color);
 }
 
+main.with-side-toc {
+  box-sizing: border-box;
+  padding-left: 260px;
+}
+
 #toggle-theme {
   float: left;
   vertical-align: middle;
@@ -45,8 +50,7 @@ main {
 }
 
 .with-side-toc #page-ctn {
-  margin-left: 300px;
-  margin-right: 24px;
+  margin: 0 auto;
 }
 
 #side-toc {
@@ -112,9 +116,8 @@ main {
 }
 
 @media (max-width: 1100px) {
-  .with-side-toc #page-ctn {
-    margin-left: 260px;
-    margin-right: 16px;
+  main.with-side-toc {
+    padding-left: 230px;
   }
 
   #side-toc {
@@ -123,8 +126,8 @@ main {
 }
 
 @media (max-width: 760px) {
-  .with-side-toc #page-ctn {
-    margin: 0 auto;
+  main.with-side-toc {
+    padding-left: 0;
   }
 
   #side-toc {
