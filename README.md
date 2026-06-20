@@ -14,12 +14,14 @@
 - Added an optional persistent left sidebar table of contents.
 - Enable it with `g:mkdp_preview_options.side_toc = 1`.
 - The sidebar is generated automatically from Markdown headings, so `[[toc]]` is not required.
+- Added options to change sidebar TOC text overflow and preview content width.
 
 ### このforkでの変更点
 
 - 左側に常時表示されるTOCサイドバーを追加しました。
 - `g:mkdp_preview_options.side_toc = 1` で有効化できます。
 - Markdownの見出しから自動生成されるため、`[[toc]]` を本文に書く必要はありません。
+- TOCサイドバーの長い文字列の表示方法と、本文の描画幅をオプションで変更できます。
 
 ### Introduction
 
@@ -212,6 +214,8 @@ let g:mkdp_browserfunc = ''
 " content_editable: if enable content editable for preview page, default: v:false
 " disable_filename: if disable filename header for preview page, default: 0
 " side_toc: if enable persistent left table of contents sidebar, default: 0
+" side_toc_text_overflow: 'ellipsis' or 'scroll', default: 'ellipsis'
+" content_width: preview content max width, accepts number(px) or CSS length, default: 900px
 let g:mkdp_preview_options = {
     \ 'mkit': {},
     \ 'katex': {},
@@ -225,6 +229,8 @@ let g:mkdp_preview_options = {
     \ 'content_editable': v:false,
     \ 'disable_filename': 0,
     \ 'side_toc': 0,
+    \ 'side_toc_text_overflow': 'ellipsis',
+    \ 'content_width': '900px',
     \ 'toc': {}
     \ }
 
@@ -299,6 +305,24 @@ Commands:
     [[toc]]
     [toc]
     [[_toc_]]
+
+**Persistent sidebar table of contents**
+
+This fork can show a persistent left sidebar TOC generated from Markdown headings.
+Long TOC entries are truncated by default. Set `side_toc_text_overflow` to `scroll` to show a horizontal scrollbar.
+Use `content_width` to change the maximum width of the preview content area.
+
+このforkでは、Markdownの見出しから左側に常時表示されるTOCサイドバーを生成できます。
+長いTOC項目はデフォルトでは省略表示されます。`side_toc_text_overflow` を `scroll` にすると横スクロールバーで全文を確認できます。
+`content_width` で本文の最大描画幅を変更できます。
+
+```vim
+let g:mkdp_preview_options = {
+    \ 'side_toc': 1,
+    \ 'side_toc_text_overflow': 'scroll',
+    \ 'content_width': '1100px',
+    \ }
+```
 
 **Image Size:**
 

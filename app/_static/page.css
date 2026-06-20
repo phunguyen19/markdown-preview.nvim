@@ -45,7 +45,7 @@ main.with-side-toc {
 
 #page-ctn {
   margin: 0 auto;
-  max-width: 900px;
+  max-width: var(--mkdp-content-width, 900px);
   color: var(--foreground-color);
 }
 
@@ -60,6 +60,7 @@ main.with-side-toc {
   left: 0;
   width: 260px;
   box-sizing: border-box;
+  overflow-x: hidden;
   overflow-y: auto;
   padding: 18px 18px 24px;
   color: var(--foreground-color);
@@ -99,6 +100,19 @@ main.with-side-toc {
 
 #side-toc a:hover {
   text-decoration: underline;
+}
+
+.side-toc-scroll #side-toc {
+  overflow-x: auto;
+}
+
+.side-toc-scroll #side-toc ol {
+  min-width: max-content;
+}
+
+.side-toc-scroll #side-toc a {
+  overflow: visible;
+  text-overflow: clip;
 }
 
 #side-toc .side-toc-level-2 {

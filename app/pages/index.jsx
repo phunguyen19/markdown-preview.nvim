@@ -35,6 +35,19 @@ const headingSelector = [
   '.markdown-body h6[id]'
 ].join(',')
 
+function normalizeCssLength(value) {
+  if (typeof value === 'number') {
+    return value > 0 ? `${value}px` : ''
+  }
+
+  if (typeof value !== 'string') {
+    return ''
+  }
+
+  const trimmed = value.trim()
+  return /^(\d+|\d*\.\d+)(px|em|rem|vw|vh|%)$/.test(trimmed) ? trimmed : ''
+}
+
 const DEFAULT_OPTIONS = {
   mkit: {
     // Enable HTML tags in source
@@ -100,7 +113,9 @@ export default class PreviewPage extends React.Component {
       contentEditable: false,
       disableFilename: 1,
       sideTocEnabled: false,
-      sideTocItems: []
+      sideTocItems: [],
+      sideTocTextOverflow: 'ellipsis',
+      contentWidth: ''
     }
     this.showThemeButton = this.showThemeButton.bind(this)
     this.hideThemeButton = this.hideThemeButton.bind(this)
@@ -318,7 +333,9 @@ export default class PreviewPage extends React.Component {
         pageTitle,
         theme,
         contentEditable: options.content_editable,
-        disableFilename: options.disable_filename
+        disableFilename: options.disable_filename,
+        sideTocTextOverflow: options.side_toc_text_overflow === 'scroll' ? 'scroll' : 'ellipsis',
+        contentWidth: normalizeCssLength(options.content_width)
       }, () => {
         if (refreshContent) {
           try {
@@ -365,7 +382,14 @@ export default class PreviewPage extends React.Component {
       disableFilename,
       sideTocEnabled,
       sideTocItems,
+      sideTocTextOverflow,
+      contentWidth,
     } = this.state
+    const mainClassNames = [
+      sideTocEnabled && sideTocItems.length > 0 ? 'with-side-toc' : '',
+      sideTocTextOverflow === 'scroll' ? 'side-toc-scroll' : ''
+    ].filter(Boolean).join(' ')
+    const mainStyle = contentWidth ? { '--mkdp-content-width': contentWidth } : {}
 
     return (
       <React.Fragment>
@@ -392,7 +416,8 @@ export default class PreviewPage extends React.Component {
         </Head>
         <main
           data-theme={this.state.theme}
-          className={sideTocEnabled && sideTocItems.length > 0 ? 'with-side-toc' : ''}
+          className={mainClassNames}
+          style={mainStyle}
         >
           {sideTocEnabled && sideTocItems.length > 0 && (
             <nav id="side-toc" aria-label="Table of contents" contentEditable="false">
