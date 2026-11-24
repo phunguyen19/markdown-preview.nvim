@@ -12,7 +12,7 @@ import markdownDeflist from 'markdown-it-deflist'
 
 import mk from './katex'
 import chart from './chart'
-import mkitMermaid from './mermaid'
+import mkitMermaid, { renderMermaid } from './mermaid'
 import linenumbers from './linenumbers'
 import image from './image'
 import diagram, { renderDiagram } from './diagram'
@@ -126,7 +126,7 @@ export default class PreviewPage extends React.Component {
   handleThemeChange() {
     this.setState((state) => ({
       theme: state.theme === 'light' ? 'dark' : 'light',
-    }))
+    }), () => renderMermaid(this.state.theme, this.maidOptions))
   }
 
   showThemeButton() {
@@ -338,12 +338,8 @@ export default class PreviewPage extends React.Component {
         contentWidth: normalizeCssLength(options.content_width)
       }, () => {
         if (refreshContent) {
-          try {
-            // eslint-disable-next-line
-            mermaid.initialize({ theme: (this.state.theme || 'light'), ...(options.maid || {}) })
-            // eslint-disable-next-line
-            mermaid.init(undefined, document.querySelectorAll('.mermaid'))
-          } catch (e) { }
+          this.maidOptions = options.maid
+          renderMermaid(this.state.theme, this.maidOptions)
 
           chart.render()
           renderDiagram()
