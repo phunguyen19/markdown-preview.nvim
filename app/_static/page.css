@@ -29,8 +29,25 @@ main.with-side-toc {
   padding-left: 260px;
 }
 
+#page-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#toggle-width {
+  height: 24px;
+  padding: 0 8px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--foreground-color);
+  background-color: var(--secondary-background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
 #toggle-theme {
-  float: left;
   vertical-align: middle;
   height: 24px;
   font-size: 14px;
@@ -47,6 +64,19 @@ main.with-side-toc {
   margin: 0 auto;
   max-width: var(--mkdp-content-width, 900px);
   color: var(--foreground-color);
+}
+
+#page-ctn.width-capped {
+  max-width: 1400px;
+}
+
+#page-ctn.width-full {
+  max-width: none;
+}
+
+.markdown-body .mermaid {
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .with-side-toc #page-ctn {

@@ -48,6 +48,42 @@ function normalizeCssLength(value) {
   return /^(\d+|\d*\.\d+)(px|em|rem|vw|vh|%)$/.test(trimmed) ? trimmed : ''
 }
 
+const WIDTH_PRESETS = ['default', 'capped', 'full']
+const WIDTH_STORAGE_KEY = 'mkdp-content-width'
+
+function isWidthPreset(value) {
+  return WIDTH_PRESETS.includes(value)
+}
+
+function contentWidthFromConfig(value) {
+  if (isWidthPreset(value)) {
+    return { mode: value, length: '' }
+  }
+  const length = normalizeCssLength(value)
+  return length ? { mode: 'custom', length } : { mode: 'default', length: '' }
+}
+
+// A custom length is not part of the cycle, so the first click lands on 'default'.
+function nextWidthPreset(mode) {
+  const index = WIDTH_PRESETS.indexOf(mode)
+  return WIDTH_PRESETS[(index + 1) % WIDTH_PRESETS.length]
+}
+
+function readStoredWidthPreset() {
+  try {
+    const value = window.localStorage.getItem(WIDTH_STORAGE_KEY)
+    return isWidthPreset(value) ? value : null
+  } catch (e) {
+    return null
+  }
+}
+
+function storeWidthPreset(preset) {
+  try {
+    window.localStorage.setItem(WIDTH_STORAGE_KEY, preset)
+  } catch (e) { }
+}
+
 const DEFAULT_OPTIONS = {
   mkit: {
     // Enable HTML tags in source
@@ -115,12 +151,25 @@ export default class PreviewPage extends React.Component {
       sideTocEnabled: false,
       sideTocItems: [],
       sideTocTextOverflow: 'ellipsis',
-      contentWidth: ''
+      configWidth: contentWidthFromConfig(undefined),
+      chosenWidthPreset: null
     }
     this.showThemeButton = this.showThemeButton.bind(this)
     this.hideThemeButton = this.hideThemeButton.bind(this)
     this.handleThemeChange = this.handleThemeChange.bind(this)
     this.updateSideToc = this.updateSideToc.bind(this)
+    this.handleWidthToggle = this.handleWidthToggle.bind(this)
+  }
+
+  effectiveWidth() {
+    const { chosenWidthPreset, configWidth } = this.state
+    return chosenWidthPreset ? { mode: chosenWidthPreset, length: '' } : configWidth
+  }
+
+  handleWidthToggle() {
+    const preset = nextWidthPreset(this.effectiveWidth().mode)
+    storeWidthPreset(preset)
+    this.setState({ chosenWidthPreset: preset })
   }
 
   handleThemeChange() {
@@ -200,6 +249,7 @@ export default class PreviewPage extends React.Component {
   }
 
   componentDidMount() {
+    this.setState({ chosenWidthPreset: readStoredWidthPreset() })
     this.startSocket(parseFloat(window.location.pathname.split('/')[2]))
   }
 
@@ -335,7 +385,7 @@ export default class PreviewPage extends React.Component {
         contentEditable: options.content_editable,
         disableFilename: options.disable_filename,
         sideTocTextOverflow: options.side_toc_text_overflow === 'scroll' ? 'scroll' : 'ellipsis',
-        contentWidth: normalizeCssLength(options.content_width)
+        configWidth: contentWidthFromConfig(options.content_width)
       }, () => {
         if (refreshContent) {
           try {
@@ -383,13 +433,15 @@ export default class PreviewPage extends React.Component {
       sideTocEnabled,
       sideTocItems,
       sideTocTextOverflow,
-      contentWidth,
     } = this.state
+    const width = this.effectiveWidth()
     const mainClassNames = [
       sideTocEnabled && sideTocItems.length > 0 ? 'with-side-toc' : '',
       sideTocTextOverflow === 'scroll' ? 'side-toc-scroll' : ''
     ].filter(Boolean).join(' ')
-    const mainStyle = contentWidth ? { '--mkdp-content-width': contentWidth } : {}
+    const mainStyle = width.length ? { '--mkdp-content-width': width.length } : {}
+    const widthLabel = width.mode === 'custom' ? width.length : width.mode
+    const nextPreset = nextWidthPreset(width.mode)
 
     return (
       <React.Fragment>
@@ -431,7 +483,7 @@ export default class PreviewPage extends React.Component {
               </ol>
             </nav>
           )}
-          <div id="page-ctn" contentEditable={contentEditable ? 'true' : 'false'}>
+          <div id="page-ctn" className={`width-${width.mode}`} contentEditable={contentEditable ? 'true' : 'false'}>
             { disableFilename == 0 &&
               <header
                 id="page-header"
@@ -454,17 +506,29 @@ export default class PreviewPage extends React.Component {
                   </svg>
                   {name}
                 </h3>
-                {themeModeIsVisible && (
-                  <label id="toggle-theme" for="theme">
-                    <input
-                      id="theme"
-                      type="checkbox"
-                      checked={theme === "dark"}
-                      onChange={this.handleThemeChange}
-                    />
-                    <span>Dark Mode</span>
-                  </label>
-               )}
+                <div id="page-controls">
+                  {themeModeIsVisible && (
+                    <label id="toggle-theme" for="theme">
+                      <input
+                        id="theme"
+                        type="checkbox"
+                        checked={theme === "dark"}
+                        onChange={this.handleThemeChange}
+                      />
+                      <span>Dark Mode</span>
+                    </label>
+                  )}
+                  <button
+                    id="toggle-width"
+                    type="button"
+                    contentEditable="false"
+                    onClick={this.handleWidthToggle}
+                    aria-label={`Content width: ${widthLabel}. Switch to ${nextPreset}`}
+                    title={`Content width: ${widthLabel} (click for ${nextPreset})`}
+                  >
+                    Width: {widthLabel}
+                  </button>
+                </div>
               </header>
             }
             <section
