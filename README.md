@@ -4,14 +4,14 @@
 
 > [!NOTE]
 > This is [phunguyen19](https://github.com/phunguyen19)'s fork of [iamcco/markdown-preview.nvim](https://github.com/iamcco/markdown-preview.nvim).
-> It adds a persistent side table of contents, content width presets and mermaid 11.
+> It adds a persistent side table of contents, content width presets and mermaid 11.17.2.
 > The side TOC and content width options build on [kunihiroka](https://github.com/kunihiroka)'s fork.
 
 ### Changes in this fork
 
 - Optional persistent left sidebar table of contents, generated from Markdown headings (`[[toc]]` is not required). Enable it with `g:mkdp_preview_options.side_toc = 1`.
 - Content width presets (`default`, `capped`, `full`) with an in-page toggle button.
-- Mermaid 11.
+- Mermaid 11.17.2 (vendored), re-rendered on theme toggle; diagrams that fail to parse fall back to their source.
 
 ### Introduction
 
