@@ -3,25 +3,15 @@
 > Powered by ❤️
 
 > [!NOTE]
-> This is a personal fork of [iamcco/markdown-preview.nvim](https://github.com/iamcco/markdown-preview.nvim).
-> The original project is maintained upstream; this fork adds a small customization for my own use.
->
-> これは [iamcco/markdown-preview.nvim](https://github.com/iamcco/markdown-preview.nvim) の個人forkです。
-> 本家プロジェクトは上記リンク先で管理されています。このforkでは自分用の小さな改造を追加しています。
+> This is [phunguyen19](https://github.com/phunguyen19)'s fork of [iamcco/markdown-preview.nvim](https://github.com/iamcco/markdown-preview.nvim).
+> It adds a persistent side table of contents, content width presets and mermaid 11.
+> The side TOC and content width options build on [kunihiroka](https://github.com/kunihiroka)'s fork.
 
 ### Changes in this fork
 
-- Added an optional persistent left sidebar table of contents.
-- Enable it with `g:mkdp_preview_options.side_toc = 1`.
-- The sidebar is generated automatically from Markdown headings, so `[[toc]]` is not required.
-- Added options to change sidebar TOC text overflow and preview content width.
-
-### このforkでの変更点
-
-- 左側に常時表示されるTOCサイドバーを追加しました。
-- `g:mkdp_preview_options.side_toc = 1` で有効化できます。
-- Markdownの見出しから自動生成されるため、`[[toc]]` を本文に書く必要はありません。
-- TOCサイドバーの長い文字列の表示方法と、本文の描画幅をオプションで変更できます。
+- Optional persistent left sidebar table of contents, generated from Markdown headings (`[[toc]]` is not required). Enable it with `g:mkdp_preview_options.side_toc = 1`.
+- Content width presets (`default`, `capped`, `full`) with an in-page toggle button.
+- Mermaid 11.
 
 ### Introduction
 
@@ -215,7 +205,9 @@ let g:mkdp_browserfunc = ''
 " disable_filename: if disable filename header for preview page, default: 0
 " side_toc: if enable persistent left table of contents sidebar, default: 0
 " side_toc_text_overflow: 'ellipsis' or 'scroll', default: 'ellipsis'
-" content_width: preview content max width, accepts number(px) or CSS length, default: 900px
+"   content_width: preview content max width, default: 'default'
+"   'default': 900px, 'capped': 1400px, 'full': no max width (fills the window beside the side TOC)
+"   any other value must be a number (px) or a CSS length (px, em, rem, vw, vh, %); invalid values fall back to 'default'
 let g:mkdp_preview_options = {
     \ 'mkit': {},
     \ 'katex': {},
@@ -230,7 +222,7 @@ let g:mkdp_preview_options = {
     \ 'disable_filename': 0,
     \ 'side_toc': 0,
     \ 'side_toc_text_overflow': 'ellipsis',
-    \ 'content_width': '900px',
+    \ 'content_width': 'default',
     \ 'toc': {}
     \ }
 
@@ -323,6 +315,17 @@ let g:mkdp_preview_options = {
     \ 'content_width': '1100px',
     \ }
 ```
+
+**Content width**
+
+`content_width` accepts `'default'` (900px), `'capped'` (1400px), `'full'` (no max width; the content fills the window beside the side TOC) or a CSS length such as `'1100px'`.
+Wide tables and mermaid diagrams scroll horizontally inside their own box instead of overflowing the page.
+
+The `Width: ...` button in the page header cycles `default` → `capped` → `full` → `default`.
+The last choice is saved in the browser's `localStorage` (key `mkdp-content-width`) and wins over the config value; if storage is unavailable the button still works for the current page.
+When `content_width` is a CSS length, the button shows that length and the first click switches to `default`.
+The header, and so the button, is hidden when `disable_filename` is `1`.
+To return to the config value, clear the key: `localStorage.removeItem('mkdp-content-width')` in the browser console.
 
 **Image Size:**
 
