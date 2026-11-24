@@ -439,6 +439,36 @@ export default class PreviewPage extends React.Component {
     const widthLabel = width.mode === 'custom' ? width.length : width.mode
     const nextPreset = nextWidthPreset(width.mode)
 
+    const showHeader = disableFilename == 0
+    const floatingHover = showHeader
+      ? {}
+      : { onMouseEnter: this.showThemeButton, onMouseLeave: this.hideThemeButton }
+    const pageControls = (
+      <div id="page-controls" className={showHeader ? undefined : 'floating'} {...floatingHover}>
+        {themeModeIsVisible && (
+          <label id="toggle-theme" for="theme">
+            <input
+              id="theme"
+              type="checkbox"
+              checked={theme === "dark"}
+              onChange={this.handleThemeChange}
+            />
+            <span>Dark Mode</span>
+          </label>
+        )}
+        <button
+          id="toggle-width"
+          type="button"
+          contentEditable="false"
+          onClick={this.handleWidthToggle}
+          aria-label={`Content width: ${widthLabel}. Switch to ${nextPreset}`}
+          title={`Content width: ${widthLabel} (click for ${nextPreset})`}
+        >
+          Width: {widthLabel}
+        </button>
+      </div>
+    )
+
     return (
       <React.Fragment>
         <Head>
@@ -479,8 +509,9 @@ export default class PreviewPage extends React.Component {
               </ol>
             </nav>
           )}
+          {!showHeader && pageControls}
           <div id="page-ctn" className={`width-${width.mode}`} contentEditable={contentEditable ? 'true' : 'false'}>
-            { disableFilename == 0 &&
+            { showHeader &&
               <header
                 id="page-header"
                 onMouseEnter={this.showThemeButton}
@@ -502,29 +533,7 @@ export default class PreviewPage extends React.Component {
                   </svg>
                   {name}
                 </h3>
-                <div id="page-controls">
-                  {themeModeIsVisible && (
-                    <label id="toggle-theme" for="theme">
-                      <input
-                        id="theme"
-                        type="checkbox"
-                        checked={theme === "dark"}
-                        onChange={this.handleThemeChange}
-                      />
-                      <span>Dark Mode</span>
-                    </label>
-                  )}
-                  <button
-                    id="toggle-width"
-                    type="button"
-                    contentEditable="false"
-                    onClick={this.handleWidthToggle}
-                    aria-label={`Content width: ${widthLabel}. Switch to ${nextPreset}`}
-                    title={`Content width: ${widthLabel} (click for ${nextPreset})`}
-                  >
-                    Width: {widthLabel}
-                  </button>
-                </div>
+                {pageControls}
               </header>
             }
             <section
