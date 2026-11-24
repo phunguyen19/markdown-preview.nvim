@@ -26,7 +26,7 @@ main {
 
 main.with-side-toc {
   box-sizing: border-box;
-  padding-left: 260px;
+  padding-right: 260px;
 }
 
 #page-controls {
@@ -46,6 +46,10 @@ main.with-side-toc {
   border: 1px solid var(--border-color);
   border-radius: 3px;
   opacity: 0.6;
+}
+
+main.with-side-toc #page-controls.floating {
+  right: 268px;
 }
 
 #page-controls.floating:hover {
@@ -104,7 +108,7 @@ main.with-side-toc {
   position: fixed;
   top: 0;
   bottom: 0;
-  left: 0;
+  right: 0;
   width: 260px;
   box-sizing: border-box;
   overflow-x: hidden;
@@ -112,7 +116,7 @@ main.with-side-toc {
   padding: 18px 18px 24px;
   color: var(--foreground-color);
   background-color: var(--background-color);
-  border-right: 1px solid var(--border-color);
+  border-left: 1px solid var(--border-color);
   font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   z-index: 10;
 }
@@ -178,7 +182,11 @@ main.with-side-toc {
 
 @media (max-width: 1100px) {
   main.with-side-toc {
-    padding-left: 230px;
+    padding-right: 230px;
+  }
+
+  main.with-side-toc #page-controls.floating {
+    right: 238px;
   }
 
   #side-toc {
@@ -188,7 +196,11 @@ main.with-side-toc {
 
 @media (max-width: 760px) {
   main.with-side-toc {
-    padding-left: 0;
+    padding-right: 0;
+  }
+
+  main.with-side-toc #page-controls.floating {
+    right: 8px;
   }
 
   #side-toc {
@@ -197,6 +209,11 @@ main.with-side-toc {
 }
 
 #page-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  box-sizing: border-box;
+  height: 41px;
   display: flex;
   justify-content: space-between;
   padding: 8px;
@@ -225,4 +242,8 @@ main.with-side-toc {
   padding-right: 16px;
   font-size: 14px;
   font-weight: 600;
+}
+
+#page-header ~ .markdown-body :is(h1, h2, h3, h4, h5, h6) {
+  scroll-margin-top: 49px;
 }

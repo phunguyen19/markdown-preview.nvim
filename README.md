@@ -9,7 +9,7 @@
 
 ### Changes in this fork
 
-- Optional persistent left sidebar table of contents, generated from Markdown headings (`[[toc]]` is not required). Enable it with `g:mkdp_preview_options.side_toc = 1`.
+- Optional persistent right sidebar table of contents, generated from Markdown headings (`[[toc]]` is not required). Enable it with `g:mkdp_preview_options.side_toc = 1`.
 - Content width presets (`default`, `capped`, `full`) with an in-page toggle button.
 - Mermaid 11.17.2 (vendored), re-rendered on theme toggle; diagrams that fail to parse fall back to their source.
 
@@ -203,7 +203,7 @@ let g:mkdp_browserfunc = ''
 " sequence_diagrams: js-sequence-diagrams options
 " content_editable: if enable content editable for preview page, default: v:false
 " disable_filename: if disable filename header for preview page, default: 0
-" side_toc: if enable persistent left table of contents sidebar, default: 0
+" side_toc: if enable persistent right table of contents sidebar, default: 0
 " side_toc_text_overflow: 'ellipsis' or 'scroll', default: 'ellipsis'
 "   content_width: preview content max width, default: 'default'
 "   'default': 900px, 'capped': 1400px, 'full': no max width (fills the window beside the side TOC)
@@ -300,11 +300,11 @@ Commands:
 
 **Persistent sidebar table of contents**
 
-This fork can show a persistent left sidebar TOC generated from Markdown headings.
+This fork can show a persistent right sidebar TOC generated from Markdown headings.
 Long TOC entries are truncated by default. Set `side_toc_text_overflow` to `scroll` to show a horizontal scrollbar.
 Use `content_width` to change the maximum width of the preview content area.
 
-このforkでは、Markdownの見出しから左側に常時表示されるTOCサイドバーを生成できます。
+このforkでは、Markdownの見出しから右側に常時表示されるTOCサイドバーを生成できます。
 長いTOC項目はデフォルトでは省略表示されます。`side_toc_text_overflow` を `scroll` にすると横スクロールバーで全文を確認できます。
 `content_width` で本文の最大描画幅を変更できます。
 
